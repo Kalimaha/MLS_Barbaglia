@@ -18,7 +18,7 @@ public class MLS {
 
     private static IO io = new IO();
 
-    private static int free_mcc = 1000000000;
+    private static int free_mcc = 1024;
 
     private static int counter_in = 0;
 
@@ -36,6 +36,8 @@ public class MLS {
 
     private static Generatore g_routing = new Generatore(61, 7, 15, 12, 1, 0.9);
 
+    private static Generatore g_mcc_size = new Generatore(5, 1, 5, 0, free_mcc);
+
     public static void main(String[] args) {
         calendar = new Calendar();
         calendar.setT_a(clock + g_arrival.getNextExp());
@@ -47,6 +49,7 @@ public class MLS {
             Event next = calendar.get_next();
 //            System.out.println("Next Event: " + next + "\t\t\t\tCLOCK: " + clock);
             clock = calendar.get_next_time(next);
+//            System.out.println(next + ": " + clock);
             switch (next) {
                 case ARRIVAL: arrival(); break;
                 case CPU: cpu(); break;
@@ -57,19 +60,18 @@ public class MLS {
     }
 
     private static void arrival() {
-        int job_size = 100;
-        int priority = 1;
         Job j = new Job();
-        if (job_size <= free_mcc) {
-            free_mcc -= job_size;
+        j.setJob_size( g_mcc_size.getNextRange());
+        if (j.getJob_size() <= free_mcc) {
+            j.setProcessing_time(g_cpu.getNextErlang3());
+            free_mcc -= j.getJob_size();
             j.setT_in(clock);
             counter_in++;
-            j.setPriority(priority);
-            j.setJob_size(job_size);
+
             if (cpu.isIs_free()) {
                 cpu.setIs_free(false);
                 cpu.setJob(j);
-                calendar.setT_cpu(clock + g_cpu.getNextErlang3());
+                calendar.setT_cpu(clock + j.getProcessing_time());
             } else {
                 cpu.getQ().add(j);
             }
@@ -86,28 +88,40 @@ public class MLS {
                     io.setIs_free(false);
                     io.setJob(cpu.getJob());
                     cpu.setJob(null);
+                    cpu.setIs_free(true);
                     calendar.setT_io(clock + g_io.getNextErlang3());
                 } else {
                     io.getQ().add(cpu.getJob());
                     cpu.setJob(null);
+                    cpu.setIs_free(true);
                 }
                 break;
             case OUT:
+                cpu.setIs_free(true);
                 cpu.getJob().setT_out(clock);
                 free_mcc += cpu.getJob().getJob_size();
                 if (q_mcc.size() > 0) {
-                    int job_size = 100;
-                    int priority = 1;
-                    Job j = new Job();
-                    free_mcc -= job_size;
-                    cpu.getQ().add(j);
+                    for(int i=0; i < q_mcc.size(); i++) {
+                        Job j = q_mcc.get(i);
+                        if ( free_mcc >= j.getJob_size()) {
+                            q_mcc.remove(i);
+                            j.setT_in(clock);
+                            free_mcc -= j.getJob_size();
+                            j.setProcessing_time(g_cpu.getNextErlang3());
+                            cpu.getQ().add(j);
+                            counter_in++;
+                        }
+                    }
                 }
                 counter_out++;
                 System.out.println("Tr: " + (cpu.getJob().getT_out() - cpu.getJob().getT_in()));
+//                System.out.println("\tIN: " + cpu.getJob().getT_in() + ", OUT: " + cpu.getJob().getT_out());
+//                System.out.println();
                 break;
         }
         if (cpu.getQ().size() > 0) {
             cpu.setJob(cpu.getJobFromQ());
+            cpu.setIs_free(false);
             calendar.setT_cpu(clock + g_cpu.getNextErlang3());
         } else {
             calendar.setT_cpu(Double.MAX_VALUE);
@@ -124,9 +138,11 @@ public class MLS {
         } else {
             cpu.getQ().add(io.getJob());
             io.setJob(null);
+            io.setIs_free(true);
         }
         if (io.getQ().size() > 0) {
             io.setJob(io.getJobFromQ());
+            io.setIs_free(false);
             calendar.setT_io(clock + g_io.getNextErlang3());
         } else {
             calendar.setT_io(Double.MAX_VALUE);

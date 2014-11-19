@@ -8,9 +8,9 @@ public class Job {
 
     private double t_out;
 
-    private int priority;
+    private double processing_time;
 
-    private int job_size;
+    private double job_size;
 
     public String name = UUID.randomUUID().toString().substring(0, 4);
 
@@ -18,11 +18,11 @@ public class Job {
 
     }
 
-    public int getJob_size() {
+    public double getJob_size() {
         return job_size;
     }
 
-    public void setJob_size(int job_size) {
+    public void setJob_size(double job_size) {
         this.job_size = job_size;
     }
 
@@ -42,12 +42,19 @@ public class Job {
         this.t_out = t_out;
     }
 
-    public int getPriority() {
-        return priority;
+    public double getProcessing_time() {
+        return processing_time;
     }
 
-    public void setPriority(int priority) {
-        this.priority = priority;
+    public void setProcessing_time(double processing_time) {
+        this.processing_time = processing_time;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

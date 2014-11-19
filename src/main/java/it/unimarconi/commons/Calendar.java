@@ -13,7 +13,7 @@ public class Calendar {
     public Calendar() {
         this.setT_cpu(Integer.MAX_VALUE);
         this.setT_io(Integer.MAX_VALUE);
-        this.setT_end_sim(500);
+        this.setT_end_sim(5000);
     }
 
     public Event get_next() {
