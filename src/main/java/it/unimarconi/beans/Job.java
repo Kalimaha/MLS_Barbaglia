@@ -10,10 +10,8 @@ public class Job {
 
     private int job_size;
 
-    public Job(double t_in, int priority, int job_size) {
-        this.t_in = t_in;
-        this.priority = priority;
-        this.job_size = job_size;
+    public Job() {
+
     }
 
     public int getJob_size() {

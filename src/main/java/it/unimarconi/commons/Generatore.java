@@ -18,7 +18,7 @@ public class Generatore {
 
     private double max;
 
-    private int avg;
+    private double avg;
 
     private double p;
 
@@ -31,7 +31,7 @@ public class Generatore {
         this.setMax(max);
     }
 
-    public Generatore(int a, long seed, int b, int avg) {
+    public Generatore(int a, long seed, int b, double avg) {
         this.setA(a);
         this.setSeed1(seed);
         this.setB(b);
@@ -39,7 +39,7 @@ public class Generatore {
         this.setAvg(avg);
     }
 
-    public Generatore(int a, long seed1, long seed2, int b, int avg, double p) {
+    public Generatore(int a, long seed1, long seed2, int b, double avg, double p) {
         this.setA(a);
         this.setSeed1(seed1);
         this.setSeed2(seed2);
@@ -65,6 +65,16 @@ public class Generatore {
             return xi * (this.getAvg() / (2.0 * this.getP()));
         else
             return xi * (this.getAvg() / (2.0 * (1.0 - this.getP())));
+    }
+
+    public double getNextErlang3() {
+        double ri = this.getGcm1().getNextRi();
+        double avgk = -1 * this.getAvg() / 3;
+        double sumlog = 0.0;
+        for (int j = 0; j < 3; j++) {
+            sumlog += Math.log(ri);
+        }
+        return avgk * sumlog;
     }
 
     public GCM getGcm1() {
@@ -123,11 +133,11 @@ public class Generatore {
         this.max = max;
     }
 
-    public int getAvg() {
+    public double getAvg() {
         return avg;
     }
 
-    public void setAvg(int avg) {
+    public void setAvg(double avg) {
         this.avg = avg;
     }
 
