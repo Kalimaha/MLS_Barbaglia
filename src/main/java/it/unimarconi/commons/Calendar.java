@@ -10,10 +10,10 @@ public class Calendar {
 
     private double t_end_sim;
 
-    public Calendar() {
+    public Calendar(double end_sim) {
         this.setT_cpu(Integer.MAX_VALUE);
         this.setT_io(Integer.MAX_VALUE);
-        this.setT_end_sim(5000);
+        this.setT_end_sim(end_sim);
     }
 
     public Event get_next() {
