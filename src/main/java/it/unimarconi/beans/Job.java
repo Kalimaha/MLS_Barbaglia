@@ -1,5 +1,7 @@
 package it.unimarconi.beans;
 
+import java.util.UUID;
+
 public class Job {
 
     private double t_in;
@@ -9,6 +11,8 @@ public class Job {
     private int priority;
 
     private int job_size;
+
+    public String name = UUID.randomUUID().toString().substring(0, 4);
 
     public Job() {
 

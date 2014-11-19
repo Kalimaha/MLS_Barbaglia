@@ -61,10 +61,23 @@ public class Generatore {
     public double getNextHyperExp() {
         double ri = this.getGcm1().getNextRi();
         double xi = -1.0 * 1.0 * Math.log(this.getGcm2().getNextRi());
-        if (ri <= this.getP())
+        if (ri <= this.getP()) {
+            System.out.println("DENTRO");
             return xi * (this.getAvg() / (2.0 * this.getP()));
-        else
+        }
+        else {
+            System.out.println("fuori");
             return xi * (this.getAvg() / (2.0 * (1.0 - this.getP())));
+        }
+    }
+
+    public Event getNextRoute() {
+        double ri = this.getGcm1().getNextRi();
+        double xi = -1.0 * 1.0 * Math.log(this.getGcm2().getNextRi());
+        if (ri <= this.getP())
+            return Event.IO;
+        else
+            return Event.OUT;
     }
 
     public double getNextErlang3() {

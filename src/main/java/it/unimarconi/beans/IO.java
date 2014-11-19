@@ -15,6 +15,12 @@ public class IO {
         this.setQ(new ArrayList<Job>());
     }
 
+    public Job getJobFromQ() {
+        Job j = this.getQ().get(this.getQ().size()-1);
+        this.getQ().remove(this.getQ().size()-1);
+        return j;
+    }
+
     public Job getJob() {
         return job;
     }

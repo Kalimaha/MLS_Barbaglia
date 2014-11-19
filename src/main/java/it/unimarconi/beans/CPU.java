@@ -15,6 +15,12 @@ public class CPU {
         this.setQ(new ArrayList<Job>());
     }
 
+    public Job getJobFromQ() {
+        Job j = this.getQ().get(0);
+        this.getQ().remove(0);
+        return j;
+    }
+
     public Job getJob() {
         return job;
     }
