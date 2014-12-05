@@ -7,6 +7,8 @@ import it.unimarconi.commons.Calendar;
 import it.unimarconi.commons.Event;
 import it.unimarconi.commons.Generatore;
 
+import java.util.HashMap;
+
 public class MLS {
 
     private static CPU cpu;
@@ -31,9 +33,11 @@ public class MLS {
 
     private static double jobs;
 
+    private static HashMap<String, Integer> events_map;
+
     public static void main(String[] args) {
         int time_step = 1000;
-        for (int i = time_step ; i < 15000 ; i += time_step) {
+        for (int i = time_step ; i <= 1000 ; i += time_step) {
             io = new IO();
             cpu = new CPU();
             clock = 0;
@@ -43,10 +47,16 @@ public class MLS {
             g_arrival = new Generatore(5, 1, 5, 0.033);
             calendar = new Calendar(i);
             calendar.setTempoArrivo(clock + g_arrival.getNextExp());
-            scheduler();
             sum = 0;
             avg = 0;
             jobs = 0;
+            events_map = new HashMap<String, Integer>();
+            events_map.put(Event.ARRIVAL.toString(), 0);
+            events_map.put(Event.CPU.toString(), 0);
+            events_map.put(Event.IO.toString(), 0);
+            events_map.put(Event.END_SIM.toString(), 0);
+            events_map.put(Event.OUT.toString(), 0);
+            scheduler();
         }
     }
 
@@ -54,6 +64,7 @@ public class MLS {
         while (clock < calendar.getTempoFineSimulazione()) {
             Event next = calendar.get_next();
             clock = calendar.get_next_time(next);
+            events_map.put(next.toString(), 1 + events_map.get(next.toString()));
             switch (next) {
                 case ARRIVAL: arrival(); break;
                 case CPU: cpu(); break;
@@ -103,6 +114,7 @@ public class MLS {
                 }
                 break;
             case OUT:
+                events_map.put(Event.OUT.toString(), 1 + events_map.get(Event.OUT.toString()));
                 cpu.setFree(true);
                 cpu.getJob().setTempoUscita(clock);
                 sum += cpu.getJob().getTempoJob();
@@ -141,7 +153,12 @@ public class MLS {
     }
 
     private static void end_sim() {
+        for (String key : events_map.keySet())
+            System.out.println(key + ": " + events_map.get(key));
         System.out.println("Tempo di uscita medio: " + sum / jobs);
+        System.out.println("Coda CPU: " + cpu.getQ().size());
+        System.out.println("Coda I/O: " + io.getQ().size());
+        System.out.println();
     }
 
 }
