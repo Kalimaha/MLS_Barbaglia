@@ -25,21 +25,33 @@ public class MLS {
 
     private static Generatore g_routing;
 
+    private static double sum;
+
+    private static double avg;
+
+    private static double jobs;
+
     public static void main(String[] args) {
-        io = new IO();
-        cpu = new CPU();
-        clock = 0;
-        g_routing = new Generatore(61, 7, 15, 12, 1, 0.9);
-        g_cpu = new Generatore(5, 3, 5, 0.5);
-        g_io = new Generatore(5, 5, 5, 0.5);
-        g_arrival = new Generatore(5, 1, 5, 0.033);
-        calendar = new Calendar(5000);
-        calendar.setT_a(clock + g_arrival.getNextExp());
-        scheduler();
+        int time_step = 1000;
+        for (int i = time_step ; i < 15000 ; i += time_step) {
+            io = new IO();
+            cpu = new CPU();
+            clock = 0;
+            g_routing = new Generatore(61, 7, 15, 12, 1, 0.9);
+            g_cpu = new Generatore(5, 3, 5, 0.5);
+            g_io = new Generatore(5, 5, 5, 0.5);
+            g_arrival = new Generatore(5, 1, 5, 0.033);
+            calendar = new Calendar(i);
+            calendar.setTempoArrivo(clock + g_arrival.getNextExp());
+            scheduler();
+            sum = 0;
+            avg = 0;
+            jobs = 0;
+        }
     }
 
     private static void scheduler() {
-        while (clock < calendar.getT_end_sim()) {
+        while (clock < calendar.getTempoFineSimulazione()) {
             Event next = calendar.get_next();
             clock = calendar.get_next_time(next);
             switch (next) {
@@ -52,17 +64,27 @@ public class MLS {
     }
 
     private static void arrival() {
+
+        /* Prevedi prossimo tempo di arrivo. */
+        calendar.setTempoArrivo(clock + g_arrival.getNextExp());
+
+        /* Crea nuovo job. */
         Job j = new Job();
-        j.setProcessing_time(g_cpu.getNextErlang3());
+        j.setTempoProcessamento(g_cpu.getNextErlang3());
         j.setTempoArrivo(clock);
+
+        /* Entra nella CPU se libera... */
         if (cpu.isFree()) {
             cpu.setFree(false);
             cpu.setJob(j);
-            calendar.setT_cpu(clock + j.getProcessing_time());
-        } else {
+            calendar.setTempoCPU(clock + j.getTempoProcessamento());
+        }
+
+        /* ...altrimenti in coda. */
+        else {
             cpu.getQ().add(j);
         }
-        calendar.setT_a(clock + g_arrival.getNextExp());
+
     }
 
     private static void cpu() {
@@ -73,7 +95,7 @@ public class MLS {
                     io.setJob(cpu.getJob());
                     cpu.setJob(null);
                     cpu.setFree(true);
-                    calendar.setT_io(clock + g_io.getNextErlang3());
+                    calendar.setTempoIO(clock + g_io.getNextErlang3());
                 } else {
                     io.getQ().add(cpu.getJob());
                     cpu.setJob(null);
@@ -83,14 +105,16 @@ public class MLS {
             case OUT:
                 cpu.setFree(true);
                 cpu.getJob().setTempoUscita(clock);
+                sum += cpu.getJob().getTempoJob();
+                jobs++;
                 break;
         }
         if (cpu.getQ().size() > 0) {
             cpu.setJob(cpu.getJobFromQ());
             cpu.setFree(false);
-            calendar.setT_cpu(clock + g_cpu.getNextErlang3());
+            calendar.setTempoCPU(clock + g_cpu.getNextErlang3());
         } else {
-            calendar.setT_cpu(Double.MAX_VALUE);
+            calendar.setTempoCPU(Double.MAX_VALUE);
             cpu.setFree(true);
         }
     }
@@ -100,7 +124,7 @@ public class MLS {
             cpu.setFree(false);
             cpu.setJob(io.getJob());
             io.setJob(null);
-            calendar.setT_cpu(clock + g_cpu.getNextErlang3());
+            calendar.setTempoCPU(clock + g_cpu.getNextErlang3());
         } else {
             cpu.getQ().add(io.getJob());
             io.setJob(null);
@@ -109,15 +133,15 @@ public class MLS {
         if (io.getQ().size() > 0) {
             io.setJob(io.getJobFromQ());
             io.setFree(false);
-            calendar.setT_io(clock + g_io.getNextErlang3());
+            calendar.setTempoIO(clock + g_io.getNextErlang3());
         } else {
-            calendar.setT_io(Double.MAX_VALUE);
+            calendar.setTempoIO(Double.MAX_VALUE);
             io.setFree(true);
         }
     }
 
     private static void end_sim() {
-
+        System.out.println("Tempo di uscita medio: " + sum / jobs);
     }
 
 }

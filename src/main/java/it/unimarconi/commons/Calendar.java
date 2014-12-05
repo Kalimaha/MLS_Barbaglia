@@ -2,76 +2,76 @@ package it.unimarconi.commons;
 
 public class Calendar {
 
-    private double t_a;
+    private double tempoArrivo;
 
-    private double t_cpu;
+    private double tempoCPU;
 
-    private double t_io;
+    private double tempoIO;
 
-    private double t_end_sim;
+    private double tempoFineSimulazione;
 
     public Calendar(double end_sim) {
-        this.setT_cpu(Integer.MAX_VALUE);
-        this.setT_io(Integer.MAX_VALUE);
-        this.setT_end_sim(end_sim);
+        this.setTempoCPU(Integer.MAX_VALUE);
+        this.setTempoIO(Integer.MAX_VALUE);
+        this.setTempoFineSimulazione(end_sim);
     }
 
     public Event get_next() {
         Event out = Event.ARRIVAL;
-        double min = t_a;
-        if (t_cpu < min) {
-            min = t_cpu;
+        double min = tempoArrivo;
+        if (tempoCPU < min) {
+            min = tempoCPU;
             out = Event.CPU;
         }
-        if (t_io < min) {
-            min = t_io;
+        if (tempoIO < min) {
+            min = tempoIO;
             out = Event.IO;
         }
-        if (t_end_sim < min)
+        if (tempoFineSimulazione < min)
             out = Event.END_SIM;
         return out;
     }
 
     public double get_next_time(Event e) {
         switch (e) {
-            case ARRIVAL: return this.getT_a();
-            case CPU: return this.getT_cpu();
-            case IO: return this.getT_io();
-            case END_SIM: return this.getT_end_sim();
+            case ARRIVAL: return this.getTempoArrivo();
+            case CPU: return this.getTempoCPU();
+            case IO: return this.getTempoIO();
+            case END_SIM: return this.getTempoFineSimulazione();
         }
         return 0;
     }
 
-    public double getT_a() {
-        return t_a;
+    public double getTempoArrivo() {
+        return tempoArrivo;
     }
 
-    public void setT_a(double t_a) {
-        this.t_a = t_a;
+    public void setTempoArrivo(double tempoArrivo) {
+        this.tempoArrivo = tempoArrivo;
     }
 
-    public double getT_cpu() {
-        return t_cpu;
+    public double getTempoCPU() {
+        return tempoCPU;
     }
 
-    public void setT_cpu(double t_cpu) {
-        this.t_cpu = t_cpu;
+    public void setTempoCPU(double tempoCPU) {
+        this.tempoCPU = tempoCPU;
     }
 
-    public double getT_io() {
-        return t_io;
+    public double getTempoIO() {
+        return tempoIO;
     }
 
-    public void setT_io(double t_io) {
-        this.t_io = t_io;
+    public void setTempoIO(double tempoIO) {
+        this.tempoIO = tempoIO;
     }
 
-    public double getT_end_sim() {
-        return t_end_sim;
+    public double getTempoFineSimulazione() {
+        return tempoFineSimulazione;
     }
 
-    public void setT_end_sim(double t_end_sim) {
-        this.t_end_sim = t_end_sim;
+    public void setTempoFineSimulazione(double tempoFineSimulazione) {
+        this.tempoFineSimulazione = tempoFineSimulazione;
     }
 
 }

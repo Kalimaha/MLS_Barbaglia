@@ -8,7 +8,9 @@ public class Job {
 
     private double tempoUscita;
 
-    private double processing_time;
+    private double tempoJob;
+
+    private double tempoProcessamento;
 
     private double job_size;
 
@@ -26,12 +28,12 @@ public class Job {
         this.job_size = job_size;
     }
 
-    public double getProcessing_time() {
-        return processing_time;
+    public double getTempoProcessamento() {
+        return tempoProcessamento;
     }
 
-    public void setProcessing_time(double processing_time) {
-        this.processing_time = processing_time;
+    public void setTempoProcessamento(double tempoProcessamento) {
+        this.tempoProcessamento = tempoProcessamento;
     }
 
     public String getName() {
@@ -56,6 +58,14 @@ public class Job {
 
     public void setTempoUscita(double tempoUscita) {
         this.tempoUscita = tempoUscita;
+        this.setTempoJob(this.getTempoUscita() - this.getTempoArrivo());
     }
 
+    public double getTempoJob() {
+        return tempoJob;
+    }
+
+    public void setTempoJob(double tempoJob) {
+        this.tempoJob = tempoJob;
+    }
 }
