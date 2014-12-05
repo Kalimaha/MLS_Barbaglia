@@ -27,11 +27,8 @@ public class Calendar {
             min = t_io;
             out = Event.IO;
         }
-
-        if (t_end_sim < min) {
-            min = t_end_sim;
+        if (t_end_sim < min)
             out = Event.END_SIM;
-        }
         return out;
     }
 

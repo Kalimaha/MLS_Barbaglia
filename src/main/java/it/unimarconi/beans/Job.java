@@ -4,9 +4,9 @@ import java.util.UUID;
 
 public class Job {
 
-    private double t_in;
+    private double tempoArrivo;
 
-    private double t_out;
+    private double tempoUscita;
 
     private double processing_time;
 
@@ -26,22 +26,6 @@ public class Job {
         this.job_size = job_size;
     }
 
-    public double getT_in() {
-        return t_in;
-    }
-
-    public void setT_in(double t_in) {
-        this.t_in = t_in;
-    }
-
-    public double getT_out() {
-        return t_out;
-    }
-
-    public void setT_out(double t_out) {
-        this.t_out = t_out;
-    }
-
     public double getProcessing_time() {
         return processing_time;
     }
@@ -57,4 +41,21 @@ public class Job {
     public void setName(String name) {
         this.name = name;
     }
+
+    public double getTempoArrivo() {
+        return tempoArrivo;
+    }
+
+    public void setTempoArrivo(double tempoArrivo) {
+        this.tempoArrivo = tempoArrivo;
+    }
+
+    public double getTempoUscita() {
+        return tempoUscita;
+    }
+
+    public void setTempoUscita(double tempoUscita) {
+        this.tempoUscita = tempoUscita;
+    }
+
 }
