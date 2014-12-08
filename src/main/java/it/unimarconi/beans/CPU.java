@@ -1,19 +1,16 @@
 package it.unimarconi.beans;
 
+import it.unimarconi.utils.JobComparator;
+
+import java.util.Collections;
+
 public class CPU extends Unit {
 
     @Override
     public Job getJobFromQ() {
-        int index = 0;
-        double min = Double.MAX_VALUE;
-        for(int i=0; i < this.getQ().size(); i++) {
-            if (this.getQ().get(i).getTempoProcessamento() < min) {
-                index = i;
-                min = this.getQ().get(i).getTempoProcessamento();
-            }
-        }
-        Job j = this.getQ().get(index);
-        this.getQ().remove(index);
+        Collections.sort(this.getQ(), new JobComparator());
+        Job j = this.getQ().get(this.getQ().size() - 1);
+        this.getQ().remove(this.getQ().size()-1);
         return j;
     }
 

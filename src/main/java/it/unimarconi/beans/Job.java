@@ -68,4 +68,14 @@ public class Job {
     public void setTempoJob(double tempoJob) {
         this.tempoJob = tempoJob;
     }
+
+    public int compareTo(Job b) {
+        if (this.getTempoProcessamento() > b.getTempoProcessamento())
+            return 1;
+        else if (this.getTempoProcessamento() < b.getTempoProcessamento())
+            return -1;
+        else
+            return 0;
+    }
+
 }
