@@ -27,8 +27,8 @@ public class Calendar {
             min = tempoIO;
             out = Event.IO;
         }
-        if (tempoFineSimulazione < min)
-            out = Event.END_SIM;
+//        if (tempoFineSimulazione < min)
+//            out = Event.END_SIM;
         return out;
     }
 
@@ -37,7 +37,7 @@ public class Calendar {
             case ARRIVAL: return this.getTempoArrivo();
             case CPU: return this.getTempoCPU();
             case IO: return this.getTempoIO();
-            case END_SIM: return this.getTempoFineSimulazione();
+//            case END_SIM: return this.getTempoFineSimulazione();
         }
         return 0;
     }

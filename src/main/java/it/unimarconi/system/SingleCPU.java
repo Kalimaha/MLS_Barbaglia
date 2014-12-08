@@ -57,7 +57,16 @@ public class SingleCPU {
     }
 
     private StatisticheSimulazione scheduler() {
-        while (this.getClock() < this.getCalendar().getTempoFineSimulazione()) {
+//        while (this.getClock() < this.getCalendar().getTempoFineSimulazione()) {
+//            Event next = this.getCalendar().get_next();
+//            this.setClock(this.getCalendar().get_next_time(next));
+//            switch (next) {
+//                case ARRIVAL: arrival(); break;
+//                case CPU: cpu(); break;
+//                case IO: io();break;
+//            }
+//        }
+        while (this.getTempiUscita().size() < this.getTempoFineSimulazione()) {
             Event next = this.getCalendar().get_next();
             this.setClock(this.getCalendar().get_next_time(next));
             switch (next) {
