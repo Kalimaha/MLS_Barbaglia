@@ -9,8 +9,8 @@ public class CPU extends Unit {
     @Override
     public Job getJobFromQ() {
         Collections.sort(this.getQ(), new JobComparator());
-        Job j = this.getQ().get(this.getQ().size() - 1);
-        this.getQ().remove(this.getQ().size()-1);
+        Job j = this.getQ().get(0);
+        this.getQ().remove(0);
         return j;
     }
 

@@ -7,14 +7,7 @@ public class StatisticheSimulazione {
 
     private double varianza;
 
-    public StatisticheSimulazione() {
-
-    }
-
-    public StatisticheSimulazione(double tempoMedio, double varianza) {
-        this.setTempoMedio(tempoMedio);
-        this.setVarianza(varianza);
-    }
+    private int jobs;
 
     public double getTempoMedio() {
         return tempoMedio;
@@ -28,6 +21,14 @@ public class StatisticheSimulazione {
         return varianza;
     }
 
+    public int getJobs() {
+        return jobs;
+    }
+
+    public void setJobs(int jobs) {
+        this.jobs = jobs;
+    }
+
     public void setVarianza(double varianza) {
         this.varianza = varianza;
     }
@@ -35,6 +36,7 @@ public class StatisticheSimulazione {
     @Override
     public String toString() {
         return "Tempo Medio: " + this.getTempoMedio() +
+                "\t\t\tJobs: " + this.getJobs() +
                 "\t\t\tVarianza: " + this.getVarianza();
     }
 }

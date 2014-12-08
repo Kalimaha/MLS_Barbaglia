@@ -42,7 +42,7 @@ public class SingleCPU {
         this.setIo(new IO());
         this.setCpu(new CPU());
         this.setClock(0);
-        this.setGeneratoreArrivi(new Generatore(61, 7, 15, 32, 1, 0.9));
+        this.setGeneratoreArrivi(new Generatore(5, 1, 32, 0.033));
         this.setGeneratoreCPU(new Generatore(5, 3, 32, 0.5));
         this.setGeneratoreIO(new Generatore(5, 5, 32, 0.5));
         this.setGeneratoreRouting(new Generatore(61, 7, 15, 32, 1, 0.9));
@@ -148,6 +148,7 @@ public class SingleCPU {
     private StatisticheSimulazione end_sim() {
         this.getStatisticheSimulazione().setTempoMedio(Stats.media(this.getTempiUscita()));
         this.getStatisticheSimulazione().setVarianza(Stats.sd(this.getTempiUscita()));
+        this.getStatisticheSimulazione().setJobs(this.getTempiUscita().size());
         return this.getStatisticheSimulazione();
     }
 
