@@ -33,20 +33,26 @@ public class SingleCPU {
 
     private ArrayList<Double> tempiUscita;
 
-    private double tempoFineSimulazione;
-
     private StatisticheSimulazione statisticheSimulazione;
 
-    public SingleCPU(double tempoFineSimulazione) {
-        this.setTempoFineSimulazione(tempoFineSimulazione);
+    private int a;
+
+    private int jobTotali;
+
+    public SingleCPU(int a, int jobTotali) {
+        this.setA(a);
+        this.setJobTotali(jobTotali);
         this.setIo(new IO());
         this.setCpu(new CPU());
         this.setClock(0);
-        this.setGeneratoreArrivi(new Generatore(5, 1, 32, 0.033));
-        this.setGeneratoreCPU(new Generatore(5, 3, 32, 0.5));
-        this.setGeneratoreIO(new Generatore(5, 5, 32, 0.5));
-        this.setGeneratoreRouting(new Generatore(61, 7, 15, 32, 1, 0.9));
-        this.setCalendar(new Calendar(this.getTempoFineSimulazione()));
+        this.setGeneratoreArrivi(new Generatore(this.getA(), 1, 32, 0.033));
+        this.setGeneratoreCPU(new Generatore(this.getA(), 1, 32, 0.5));
+        this.setGeneratoreIO(new Generatore(this.getA(), 1, 32, 0.5));
+
+        /* TODO: chabge a for the routing? */
+        this.setGeneratoreRouting(new Generatore(61, 7, 15, 16, 1, 0.9));
+
+        this.setCalendar(new Calendar());
         this.getCalendar().setTempoArrivo(this.getClock() + this.getGeneratoreArrivi().getNextExp());
         this.setTempiUscita(new ArrayList<Double>());
         this.setStatisticheSimulazione(new StatisticheSimulazione());
@@ -57,16 +63,7 @@ public class SingleCPU {
     }
 
     private StatisticheSimulazione scheduler() {
-//        while (this.getClock() < this.getCalendar().getTempoFineSimulazione()) {
-//            Event next = this.getCalendar().get_next();
-//            this.setClock(this.getCalendar().get_next_time(next));
-//            switch (next) {
-//                case ARRIVAL: arrival(); break;
-//                case CPU: cpu(); break;
-//                case IO: io();break;
-//            }
-//        }
-        while (this.getTempiUscita().size() < this.getTempoFineSimulazione()) {
+        while (this.getTempiUscita().size() < this.getJobTotali()) {
             Event next = this.getCalendar().get_next();
             this.setClock(this.getCalendar().get_next_time(next));
             switch (next) {
@@ -233,20 +230,28 @@ public class SingleCPU {
         this.generatoreRouting = generatoreRouting;
     }
 
-    public double getTempoFineSimulazione() {
-        return tempoFineSimulazione;
-    }
-
-    public void setTempoFineSimulazione(double tempoFineSimulazione) {
-        this.tempoFineSimulazione = tempoFineSimulazione;
-    }
-
     public StatisticheSimulazione getStatisticheSimulazione() {
         return statisticheSimulazione;
     }
 
     public void setStatisticheSimulazione(StatisticheSimulazione statisticheSimulazione) {
         this.statisticheSimulazione = statisticheSimulazione;
+    }
+
+    public int getA() {
+        return a;
+    }
+
+    public void setA(int a) {
+        this.a = a;
+    }
+
+    public int getJobTotali() {
+        return jobTotali;
+    }
+
+    public void setJobTotali(int jobTotali) {
+        this.jobTotali = jobTotali;
     }
 
 }

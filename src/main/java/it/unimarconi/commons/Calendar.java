@@ -8,12 +8,9 @@ public class Calendar {
 
     private double tempoIO;
 
-    private double tempoFineSimulazione;
-
-    public Calendar(double end_sim) {
+    public Calendar() {
         this.setTempoCPU(Integer.MAX_VALUE);
         this.setTempoIO(Integer.MAX_VALUE);
-        this.setTempoFineSimulazione(end_sim);
     }
 
     public Event get_next() {
@@ -23,12 +20,8 @@ public class Calendar {
             min = tempoCPU;
             out = Event.CPU;
         }
-        if (tempoIO < min) {
-            min = tempoIO;
+        if (tempoIO < min)
             out = Event.IO;
-        }
-//        if (tempoFineSimulazione < min)
-//            out = Event.END_SIM;
         return out;
     }
 
@@ -37,7 +30,6 @@ public class Calendar {
             case ARRIVAL: return this.getTempoArrivo();
             case CPU: return this.getTempoCPU();
             case IO: return this.getTempoIO();
-//            case END_SIM: return this.getTempoFineSimulazione();
         }
         return 0;
     }
@@ -64,14 +56,6 @@ public class Calendar {
 
     public void setTempoIO(double tempoIO) {
         this.tempoIO = tempoIO;
-    }
-
-    public double getTempoFineSimulazione() {
-        return tempoFineSimulazione;
-    }
-
-    public void setTempoFineSimulazione(double tempoFineSimulazione) {
-        this.tempoFineSimulazione = tempoFineSimulazione;
     }
 
 }

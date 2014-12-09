@@ -1,53 +1,62 @@
 package it.unimarconi;
 
 import it.unimarconi.beans.StatisticheSimulazione;
+import it.unimarconi.commons.Generatore;
 import it.unimarconi.system.SingleCPU;
+import it.unimarconi.utils.Stats;
+
+import java.util.ArrayList;
 
 public class MLS {
 
     public static void main(String[] args) {
-        int time_step = 5;
-        double previous_sd = Double.MIN_VALUE;
-        double previous_avg = Double.MIN_VALUE;
-        int avg_count = 0;
-        int sd_count = 0;
-        int stop_condition = 10;
-        for (int i = time_step * time_step; i <= 1000; i += time_step) {
-            StatisticheSimulazione stats = new SingleCPU(i).simula();
-            System.out.println("Tempo di fine simulazione: " + i);
-            System.out.println(stats);
-            System.out.println("Condizione sul tempo medio: " + avg_count);
-            System.out.println("Condizione sulla varianza : " + sd_count);
-            if (stats.getVarianza() < previous_sd) {
-                System.out.println("************* LA VARIANZA DIMINUISCE *************");
-                sd_count++;
-            } else {
-                sd_count--;
-                if (sd_count < 0)
-                    sd_count = 0;
-            }
-            if (stats.getTempoMedio() > 0.9 * previous_avg && stats.getTempoMedio() < 1.1 * previous_avg) {
-                System.out.println("********** IL TEMPO MEDIO SI STABILIZZA **********");
-                avg_count++;
-            } else {
-                avg_count--;
-                if (avg_count < 0)
-                    avg_count = 0;
-            }
-            if (avg_count >= stop_condition && sd_count >= stop_condition) {
-                System.out.println();
-                System.out.println("****************************************************************");
-                System.out.println("*                                                              *");
-                System.out.println("*          Sistema polarizzato dopo " + i + " jobs.                  *");
-                System.out.println("*                                                              *");
-                System.out.println("****************************************************************");
-                break;
-            } else {
-                previous_sd = stats.getVarianza();
-                previous_avg = stats.getTempoMedio();
-                System.out.println();
-            }
+        Generatore generatoreIncrementoJobTotali = new Generatore(5, 1, 5, 0.0, 100.0);
+        ArrayList<Double> medie = new ArrayList<Double>();
+        int jobTotali = 100;
+        for (int i = 0 ; i < 25 ; i++) {
+            double incremento = (double)generatoreIncrementoJobTotali.getNextRange();
+            jobTotali += incremento;
+            double mediaDelleMedie = eseguiRun(jobTotali);
+            medie.add(mediaDelleMedie);
         }
+//        double media = 0;
+//        for (Double d : medie)
+//            media += d;
+//        media /= 10;
+//        System.out.println("MEDIA: " + media);
+//        double sd = 0;
+//        for (Double d : medie)
+//            sd += Math.pow(d - media, 2);
+//        sd /= 10 - 1;
+//        System.out.printf("SD: " + sd);
+    }
+
+    public static double eseguiRun(int jobTotali) {
+        int p = 30;
+        ArrayList<Double> medie = new ArrayList<Double>();
+        for (int i = 0 ; i < p ; i++) {
+            int a = generaA(i);
+//            System.out.print("Job Totali: " + jobTotali + "\t\t\tParametro a: " + a + "\t\t\t\t");
+            SingleCPU cpu = new SingleCPU(a, jobTotali);
+            StatisticheSimulazione stats = cpu.simula();
+            double tempoMedio = stats.getTempoMedio();
+            medie.add(tempoMedio);
+//            System.out.println("Tempo Medio: " + tempoMedio);
+        }
+        double mediaDelleMedie = 0;
+        for (Double d : medie)
+            mediaDelleMedie += d;
+        mediaDelleMedie /= p;
+        double sd = 0;
+        for (Double d : medie)
+            sd += Math.pow(d - mediaDelleMedie, 2);
+        sd /= p - 1;
+        System.out.println("Job Totali: " + jobTotali + "\t\tMedia delle medie: " + (mediaDelleMedie / 30) + "\t\t\tSD: " + sd);
+        return mediaDelleMedie;
+    }
+
+    private static int generaA(int t) {
+        return 8 * t + 5;
     }
 
 }
