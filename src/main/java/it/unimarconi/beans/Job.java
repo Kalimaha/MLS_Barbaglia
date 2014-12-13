@@ -20,6 +20,10 @@ public class Job implements Comparable<Job> {
 
     }
 
+    public Job(double tempoProcessamento) {
+        this.setTempoProcessamento(tempoProcessamento);
+    }
+
     public double getJob_size() {
         return job_size;
     }

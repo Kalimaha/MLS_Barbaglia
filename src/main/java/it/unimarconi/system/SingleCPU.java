@@ -109,7 +109,7 @@ public class SingleCPU {
                     this.getCpu().setFree(true);
                     this.getCalendar().setTempoIO(this.getClock() + this.getGeneratoreIO().getNextErlang3());
                 } else {
-                    this.getIo().getQ().add(this.getCpu().getJob());
+                    this.getIo().getIoQ().add(this.getCpu().getJob());
                     this.getCpu().setJob(null);
                     this.getCpu().setFree(true);
                 }
@@ -145,7 +145,7 @@ public class SingleCPU {
             this.getIo().setJob(null);
             this.getIo().setFree(true);
         }
-        if (this.getIo().getQ().size() > 0) {
+        if (this.getIo().getIoQ().size() > 0) {
             this.getIo().setJob(this.getIo().getJobFromQ());
             this.getIo().setFree(false);
             this.getCalendar().setTempoIO(this.getClock() + this.getGeneratoreIO().getNextErlang3());
