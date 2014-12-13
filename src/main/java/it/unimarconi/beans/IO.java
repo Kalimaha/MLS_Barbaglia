@@ -4,8 +4,11 @@ public class IO extends Unit {
 
     @Override
     public Job getJobFromQ() {
-        Job j = this.getQ().get(this.getQ().size() - 1);
-        this.getQ().remove(this.getQ().size()-1);
+//        Job j = this.getQ().get(this.getQ().size() - 1);
+//        this.getQ().remove(this.getQ().size()-1);
+//        return j;
+        Job j = this.getQ().iterator().next();
+        this.getQ().remove(j);
         return j;
     }
 

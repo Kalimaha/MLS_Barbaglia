@@ -2,7 +2,7 @@ package it.unimarconi.beans;
 
 import java.util.UUID;
 
-public class Job {
+public class Job implements Comparable<Job> {
 
     private double tempoArrivo;
 
@@ -69,6 +69,8 @@ public class Job {
         this.tempoJob = tempoJob;
     }
 
+
+    @Override
     public int compareTo(Job b) {
         if (this.getTempoProcessamento() > b.getTempoProcessamento())
             return 1;
