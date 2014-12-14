@@ -69,6 +69,24 @@ public class SingleCPU {
 
     }
 
+    public ArrayList<Double> simulaPerRunReplicati() {
+
+        /* Simula fino al numero di job richiesti. */
+        while (this.getTempiUscita().size() < this.getJobTotali()) {
+            Event next = this.getCalendar().get_next();
+            this.setClock(this.getCalendar().get_next_time(next));
+            switch (next) {
+                case ARRIVAL: arrival(); break;
+                case CPU: cpu(); break;
+                case IO: io();break;
+            }
+        }
+
+        /* Restituisci la media. */
+        return this.getTempiUscita();
+
+    }
+
     private void arrival() {
 
         /* Prevedi prossimo tempo di arrivo. */
