@@ -8,9 +8,9 @@ public class MLS {
 
     static int p = 500;
 
-    static int jobTotali = 2000;
+    static int jobTotali = 500;
 
-    static int passo = 50;
+    static int passo = 10;
 
     static ArrayList<Double> avgs = new ArrayList<Double>();
 
