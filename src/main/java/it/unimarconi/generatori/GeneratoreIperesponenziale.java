@@ -6,8 +6,8 @@ public class GeneratoreIperesponenziale extends Generatore {
 
     private double p;
 
-    public GeneratoreIperesponenziale(int a, long x0, int b, double p) {
-        super(a, x0, b);
+    public GeneratoreIperesponenziale(long x0, double p) {
+        super(x0);
         this.setP(p);
     }
 

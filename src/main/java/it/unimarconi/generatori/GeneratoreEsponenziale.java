@@ -4,8 +4,8 @@ public class GeneratoreEsponenziale extends Generatore {
 
     private double media;
 
-    public GeneratoreEsponenziale(int a, long x0, int b, double media) {
-        super(a, x0, b);
+    public GeneratoreEsponenziale(long x0, double media) {
+        super(x0);
         this.setMedia(media);
     }
 

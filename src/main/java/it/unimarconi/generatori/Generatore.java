@@ -2,21 +2,16 @@ package it.unimarconi.generatori;
 
 public class Generatore {
 
-    private int a;
+    private final int a = 1220703125;
 
-    private long m = 214748648;
-
-    private int b;
+    private final long m = (long)Math.pow(2, 28);
 
     private long x0;
 
     private double ri;
 
-    public Generatore(int a, long x0, int b) {
-        this.setA(a);
-        this.setB(b);
+    public Generatore(long x0) {
         this.setX0(x0);
-//        this.setM((long)Math.pow(2.0, this.getB()));
     }
 
     public long getNext() {
@@ -35,24 +30,8 @@ public class Generatore {
         return a;
     }
 
-    public void setA(int a) {
-        this.a = a;
-    }
-
     public long getM() {
         return m;
-    }
-
-    public void setM(long m) {
-        this.m = m;
-    }
-
-    public int getB() {
-        return b;
-    }
-
-    public void setB(int b) {
-        this.b = b;
     }
 
     public long getX0() {

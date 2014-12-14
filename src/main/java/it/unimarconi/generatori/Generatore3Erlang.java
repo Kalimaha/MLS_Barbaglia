@@ -10,12 +10,12 @@ public class Generatore3Erlang extends Generatore {
 
     private Generatore g3;
 
-    public Generatore3Erlang(int a, long x0, int b, double media) {
-        super(a, x0, b);
+    public Generatore3Erlang(long x0_1, long x0_2, long x0_3, double media) {
+        super(-1);
         this.setMedia(media);
-        g1 = new Generatore(a, 5, b);
-        g2 = new Generatore(a, 9, b);
-        g3 = new Generatore(a, 67, b);
+        g1 = new Generatore(x0_1);
+        g2 = new Generatore(x0_2);
+        g3 = new Generatore(x0_3);
     }
 
     public double getNext3Erlang () {
@@ -26,6 +26,30 @@ public class Generatore3Erlang extends Generatore {
         sumlog += Math.log(g3.getNextRi());
         return avgk * sumlog;
 
+    }
+
+    public Generatore getG1() {
+        return g1;
+    }
+
+    public void setG1(Generatore g1) {
+        this.g1 = g1;
+    }
+
+    public Generatore getG2() {
+        return g2;
+    }
+
+    public void setG2(Generatore g2) {
+        this.g2 = g2;
+    }
+
+    public Generatore getG3() {
+        return g3;
+    }
+
+    public void setG3(Generatore g3) {
+        this.g3 = g3;
     }
 
     public double getMedia() {
