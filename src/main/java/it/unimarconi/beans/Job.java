@@ -2,13 +2,15 @@ package it.unimarconi.beans;
 
 import java.util.UUID;
 
-public class Job {
+public class Job implements Comparable<Job> {
 
-    private double t_in;
+    private double tempoArrivo;
 
-    private double t_out;
+    private double tempoUscita;
 
-    private double processing_time;
+    private double tempoJob;
+
+    private double tempoProcessamento;
 
     private double job_size;
 
@@ -16,6 +18,10 @@ public class Job {
 
     public Job() {
 
+    }
+
+    public Job(double tempoProcessamento) {
+        this.setTempoProcessamento(tempoProcessamento);
     }
 
     public double getJob_size() {
@@ -26,28 +32,12 @@ public class Job {
         this.job_size = job_size;
     }
 
-    public double getT_in() {
-        return t_in;
+    public double getTempoProcessamento() {
+        return tempoProcessamento;
     }
 
-    public void setT_in(double t_in) {
-        this.t_in = t_in;
-    }
-
-    public double getT_out() {
-        return t_out;
-    }
-
-    public void setT_out(double t_out) {
-        this.t_out = t_out;
-    }
-
-    public double getProcessing_time() {
-        return processing_time;
-    }
-
-    public void setProcessing_time(double processing_time) {
-        this.processing_time = processing_time;
+    public void setTempoProcessamento(double tempoProcessamento) {
+        this.tempoProcessamento = tempoProcessamento;
     }
 
     public String getName() {
@@ -57,4 +47,41 @@ public class Job {
     public void setName(String name) {
         this.name = name;
     }
+
+    public double getTempoArrivo() {
+        return tempoArrivo;
+    }
+
+    public void setTempoArrivo(double tempoArrivo) {
+        this.tempoArrivo = tempoArrivo;
+    }
+
+    public double getTempoUscita() {
+        return tempoUscita;
+    }
+
+    public void setTempoUscita(double tempoUscita) {
+        this.tempoUscita = tempoUscita;
+        this.setTempoJob(this.getTempoUscita() - this.getTempoArrivo());
+    }
+
+    public double getTempoJob() {
+        return tempoJob;
+    }
+
+    public void setTempoJob(double tempoJob) {
+        this.tempoJob = tempoJob;
+    }
+
+
+    @Override
+    public int compareTo(Job b) {
+        if (this.getTempoProcessamento() > b.getTempoProcessamento())
+            return 1;
+        else if (this.getTempoProcessamento() < b.getTempoProcessamento())
+            return -1;
+        else
+            return 0;
+    }
+
 }

@@ -80,6 +80,15 @@ public class Generatore {
             return Event.OUT;
     }
 
+    public Event getNextRouteCPU() {
+        double ri = this.getGcm1().getNextRi();
+//        double xi = -1.0 * 1.0 * Math.log(this.getGcm2().getNextRi());
+        if (ri <= this.getP())
+            return Event.CPU1;
+        else
+            return Event.CPU2;
+    }
+
     public double getNextErlang3() {
         double ri = this.getGcm1().getNextRi();
         double avgk = -1 * this.getAvg() / 3;
