@@ -22,7 +22,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>it.unimarconi.MLS</mainClass>
+                            <mainClass>it.unimarconi.RimozionePolarizzazioneIniziale</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
