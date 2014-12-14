@@ -125,6 +125,8 @@ public class SingleCPU {
                 this.getCpu().setFree(true);
                 this.getCpu().getJob().setTempoUscita(this.getClock());
                 this.getTempiUscita().add(this.getCpu().getJob().getTempoJob());
+                System.out.println("\tJob " + this.getTempiUscita().size() + " uscito in " + this.getCpu().getJob().getTempoJob() +
+                                   " [" + this.getCpu().getJob().getTempoArrivo() + ", " + this.getCpu().getJob().getTempoUscita() + "]");
 //                if (this.getTempiUscita().size() % 100 == 0) {
 //                    ArrayList<Double> copia = (ArrayList<Double>)this.getTempiUscita().clone();
 //                    System.out.println(this.getTempiUscita().size() + ", " + Stats.media(copia));

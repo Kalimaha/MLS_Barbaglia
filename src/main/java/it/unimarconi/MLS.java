@@ -2,6 +2,8 @@ package it.unimarconi;
 
 import it.unimarconi.beans.StatisticheSimulazione;
 import it.unimarconi.commons.Generatore;
+import it.unimarconi.generatori.Generatore3Erlang;
+import it.unimarconi.generatori.GeneratoreEsponenziale;
 import it.unimarconi.system.DoubleCPU;
 import it.unimarconi.system.SingleCPU;
 import it.unimarconi.utils.Stats;
@@ -10,23 +12,34 @@ import java.util.ArrayList;
 
 public class MLS {
 
-    static int p = 150;
+    static int p = 2;
 
-    static int jobTotali = 150;
+    static int jobTotali = 5;
 
-    static int passo = 10;
+    static int passo = 1;
 
     static ArrayList<Double> avgs = new ArrayList<Double>();
 
     static ArrayList<Double> sds = new ArrayList<Double>();
 
-    static long x0_arrivi = 233;
+    static long x0_arrivi = 3;
 
-    static long x0_cpu = 227;
+    static long x0_cpu = 5;
 
-    static long x0_io = 229;
+    static long x0_io = 7;
 
-    static long x0_routing = 235;
+    static long x0_routing = 11;
+
+    public static void testExp() {
+        Generatore3Erlang e = new Generatore3Erlang(3, 1, 12, Math.pow(30, 1));
+        for (int i = 0 ; i < 10 ; i ++)
+            System.out.print(e.getNext3Erlang() + ", ");
+        System.out.println();
+//        e = new GeneratoreEsponenziale(1220703125, 3, 214748648, Math.pow(30, -1));
+//        for (int i = 0 ; i < 10 ; i ++)
+//            System.out.print(e.getNextExp() + ", ");
+//        System.out.println();
+    }
 
     public static void main(String[] args) {
 
@@ -45,7 +58,7 @@ public class MLS {
                     tmp += d;
                 }
                 tmp /= tempiUscitaSingoloRun.size();
-//                System.out.println("\tMEDIA: " + tmp);
+//                System.out.println("Run " + j + ", jobs: " + tempiUscitaSingoloRun.size() + ", media: " + tmp);
 //                System.out.println("\tRun: " + j + " + Media per " + tempiUscitaSingoloRun.size() + " jobs: " + tmp);
                 tempiUscitaMedi.add(tmp);
 
@@ -82,7 +95,9 @@ public class MLS {
 
         }
 
-        System.out.println("\n\n\nFINE SIMULAZIONE");
+//        testExp();
+
+//        System.out.println("\n\n\nFINE SIMULAZIONE");
 
     }
 
