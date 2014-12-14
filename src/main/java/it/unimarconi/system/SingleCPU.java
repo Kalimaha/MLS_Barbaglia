@@ -3,7 +3,6 @@ package it.unimarconi.system;
 import it.unimarconi.beans.CPU;
 import it.unimarconi.beans.IO;
 import it.unimarconi.beans.Job;
-import it.unimarconi.beans.StatisticheSimulazione;
 import it.unimarconi.commons.Calendar;
 import it.unimarconi.commons.Event;
 import it.unimarconi.commons.Generatore;
@@ -36,18 +35,14 @@ public class SingleCPU {
     private int jobTotali;
 
     public SingleCPU(long x0_arrivi, long x0_cpu_1, long x0_cpu_2 ,long x0_cpu_3, long x0_io_1, long x0_io_2 ,long x0_io_3, long x0_routing, int jobTotali) {
-
         this.setJobTotali(jobTotali);
         this.setIo(new IO(x0_io_1, x0_io_2, x0_io_3, 2));
         this.setCpu(new CPU(x0_cpu_1, x0_cpu_2, x0_cpu_3, 2));
         this.setClock(0);
-
         this.setGeneratoreArrivi(new GeneratoreEsponenziale(x0_arrivi, 30));
         this.setGeneratoreRouting(new GeneratoreIperesponenziale(x0_routing, 0.9));
-
         this.setCalendar(new Calendar());
         this.getCalendar().setTempoArrivo(this.getClock() + this.getGeneratoreArrivi().getNextExp());
-
         this.setTempiUscita(new ArrayList<Double>());
     }
 
@@ -71,7 +66,6 @@ public class SingleCPU {
 
         /* Restituisci la media. */
         return avg / this.getTempiUscita().size();
-//        return avg;
 
     }
 
@@ -119,12 +113,6 @@ public class SingleCPU {
                 this.getCpu().setFree(true);
                 this.getCpu().getJob().setTempoUscita(this.getClock());
                 this.getTempiUscita().add(this.getCpu().getJob().getTempoJob());
-//                System.out.println("\tJob " + this.getTempiUscita().size() + " uscito in " + this.getCpu().getJob().getTempoJob() +
-//                                   "\t\t\t[" + this.getCpu().getJob().getTempoArrivo() + ", " + this.getCpu().getJob().getTempoUscita() + "]");
-//                if (this.getTempiUscita().size() % 100 == 0) {
-//                    ArrayList<Double> copia = (ArrayList<Double>)this.getTempiUscita().clone();
-//                    System.out.println(this.getTempiUscita().size() + ", " + Stats.media(copia));
-//                }
                 this.getCpu().setJob(null);
                 break;
         }

@@ -6,10 +6,6 @@ public class Calendar {
 
     private double tempoCPU;
 
-    private double tempoCPU1;
-
-    private double tempoCPU2;
-
     private double tempoIO;
 
     public Calendar() {
@@ -27,22 +23,6 @@ public class Calendar {
         if (tempoArrivo < min) {
             min = tempoArrivo;
             out = Event.ARRIVAL;
-        }
-        if (tempoIO < min)
-            out = Event.IO;
-        return out;
-    }
-
-    public Event get_next_double_cpu() {
-        Event out = Event.ARRIVAL;
-        double min = tempoArrivo;
-        if (tempoCPU1 < min) {
-            min = tempoCPU1;
-            out = Event.CPU1;
-        }
-        if (tempoCPU2 < min) {
-            min = tempoCPU2;
-            out = Event.CPU2;
         }
         if (tempoIO < min)
             out = Event.IO;
@@ -82,19 +62,4 @@ public class Calendar {
         this.tempoIO = tempoIO;
     }
 
-    public double getTempoCPU1() {
-        return tempoCPU1;
-    }
-
-    public void setTempoCPU1(double tempoCPU1) {
-        this.tempoCPU1 = tempoCPU1;
-    }
-
-    public double getTempoCPU2() {
-        return tempoCPU2;
-    }
-
-    public void setTempoCPU2(double tempoCPU2) {
-        this.tempoCPU2 = tempoCPU2;
-    }
 }

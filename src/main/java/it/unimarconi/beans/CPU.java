@@ -1,16 +1,13 @@
 package it.unimarconi.beans;
 
-import it.unimarconi.generatori.Generatore;
 import it.unimarconi.generatori.Generatore3Erlang;
 import it.unimarconi.utils.JobComparator;
 
-import java.util.Collections;
 import java.util.TreeSet;
 
 public class CPU extends Unit {
 
     private Generatore3Erlang generatore;
-
 
     public CPU(long x0_1, long x0_2, long x0_3, double media) {
         super();
@@ -34,7 +31,4 @@ public class CPU extends Unit {
         return generatore;
     }
 
-    public void setGeneratore(Generatore3Erlang generatore) {
-        this.generatore = generatore;
-    }
 }
