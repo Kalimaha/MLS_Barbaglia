@@ -18,11 +18,15 @@ public class Calendar {
     }
 
     public Event get_next() {
-        Event out = Event.ARRIVAL;
-        double min = tempoArrivo;
+        Event out = null;
+        double min = Double.MAX_VALUE;
         if (tempoCPU < min) {
             min = tempoCPU;
             out = Event.CPU;
+        }
+        if (tempoArrivo < min) {
+            min = tempoArrivo;
+            out = Event.ARRIVAL;
         }
         if (tempoIO < min)
             out = Event.IO;

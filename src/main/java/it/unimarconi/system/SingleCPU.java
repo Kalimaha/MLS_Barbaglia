@@ -39,23 +39,32 @@ public class SingleCPU {
 
     private int jobTotali;
 
+    private final int b = 12;
+
     public SingleCPU(int a, int jobTotali) {
         this.setA(a);
         this.setJobTotali(jobTotali);
         this.setIo(new IO());
         this.setCpu(new CPU());
         this.setClock(0);
-        this.setGeneratoreArrivi(new Generatore(this.getA(), 1, 32, 0.033));
-        this.setGeneratoreCPU(new Generatore(this.getA(), 1, 32, 0.5));
-        this.setGeneratoreIO(new Generatore(this.getA(), 1, 32, 0.5));
 
-        /* TODO: change a for the routing? */
-        this.setGeneratoreRouting(new Generatore(61, 7, 15, 16, 1, 0.9));
+        this.setGeneratoreArrivi(new Generatore(1220703125, getSeed1(this.getA()), b, 0.033));
+        this.setGeneratoreCPU(new Generatore(1220703125, getSeed1(this.getA()), b, 0.5));
+        this.setGeneratoreIO(new Generatore(1220703125, getSeed1(this.getA()), b, 0.5));
+        this.setGeneratoreRouting(new Generatore(1220703125, getSeed1(this.getA()), getSeed2(this.getA()), b, 20, 0.9));
 
         this.setCalendar(new Calendar());
         this.getCalendar().setTempoArrivo(this.getClock() + this.getGeneratoreArrivi().getNextExp());
         this.setTempiUscita(new ArrayList<Double>());
         this.setStatisticheSimulazione(new StatisticheSimulazione());
+    }
+
+    private int getSeed1(int v) {
+        return 4 * v + 1;
+    }
+
+    private int getSeed2(int v) {
+        return 4 * v + 3;
     }
 
     public StatisticheSimulazione simula() {
@@ -83,7 +92,7 @@ public class SingleCPU {
         /* Crea nuovo job. */
         Job j = new Job();
         j.setTempoProcessamento(this.getGeneratoreCPU().getNextErlang3());
-        j.setTempoArrivo(clock);
+        j.setTempoArrivo(this.getClock());
 
         /* Entra nella CPU se libera... */
         if (this.getCpu().isFree()) {
@@ -107,7 +116,8 @@ public class SingleCPU {
                     this.getIo().setJob(this.getCpu().getJob());
                     this.getCpu().setJob(null);
                     this.getCpu().setFree(true);
-                    this.getCalendar().setTempoIO(this.getClock() + this.getGeneratoreIO().getNextErlang3());
+                    this.getIo().getJob().setTempoProcessamento(this.getGeneratoreIO().getNextErlang3());
+                    this.getCalendar().setTempoIO(this.getClock() + this.getIo().getJob().getTempoProcessamento());
                 } else {
                     this.getIo().getIoQ().add(this.getCpu().getJob());
                     this.getCpu().setJob(null);
@@ -118,19 +128,22 @@ public class SingleCPU {
                 this.getCpu().setFree(true);
                 this.getCpu().getJob().setTempoUscita(this.getClock());
                 this.getTempiUscita().add(this.getCpu().getJob().getTempoJob());
-                if (this.getTempiUscita().size() % 100 == 0) {
-                    ArrayList<Double> copia = (ArrayList<Double>)this.getTempiUscita().clone();
-                    System.out.println(this.getTempiUscita().size() + ", " + Stats.media(copia));
-                }
+//                if (this.getTempiUscita().size() % 100 == 0) {
+//                    ArrayList<Double> copia = (ArrayList<Double>)this.getTempiUscita().clone();
+//                    System.out.println(this.getTempiUscita().size() + ", " + Stats.media(copia));
+//                }
+                this.getCpu().setJob(null);
                 break;
         }
         if (this.getCpu().getQ().size() > 0) {
             this.getCpu().setJob(this.getCpu().getJobFromQ());
             this.getCpu().setFree(false);
-            this.getCalendar().setTempoCPU(this.getClock() + this.getGeneratoreCPU().getNextErlang3());
+            this.getCpu().getJob().setTempoProcessamento(this.getGeneratoreCPU().getNextErlang3());
+            this.getCalendar().setTempoCPU(this.getClock() + this.getCpu().getJob().getTempoProcessamento());
         } else {
             this.getCalendar().setTempoCPU(Double.MAX_VALUE);
             this.getCpu().setFree(true);
+            this.getCpu().setJob(null);
         }
     }
 
@@ -139,7 +152,8 @@ public class SingleCPU {
             this.getCpu().setFree(false);
             this.getCpu().setJob(this.getIo().getJob());
             this.getIo().setJob(null);
-            this.getCalendar().setTempoCPU(this.getClock() + this.getGeneratoreCPU().getNextErlang3());
+            this.getIo().getJob().setTempoProcessamento(this.getGeneratoreCPU().getNextErlang3());
+            this.getCalendar().setTempoCPU(this.getClock() + this.getIo().getJob().getTempoProcessamento());
         } else {
             this.getCpu().addJobToTheQueue(this.getIo().getJob());
             this.getIo().setJob(null);
@@ -148,10 +162,12 @@ public class SingleCPU {
         if (this.getIo().getIoQ().size() > 0) {
             this.getIo().setJob(this.getIo().getJobFromQ());
             this.getIo().setFree(false);
-            this.getCalendar().setTempoIO(this.getClock() + this.getGeneratoreIO().getNextErlang3());
+            this.getIo().getJob().setTempoProcessamento(this.getGeneratoreIO().getNextErlang3());
+            this.getCalendar().setTempoIO(this.getClock() + this.getIo().getJob().getTempoProcessamento());
         } else {
             this.getCalendar().setTempoIO(Double.MAX_VALUE);
             this.getIo().setFree(true);
+            this.getIo().setJob(null);
         }
     }
 
