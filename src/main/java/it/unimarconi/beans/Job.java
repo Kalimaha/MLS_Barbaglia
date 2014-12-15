@@ -12,8 +12,6 @@ public class Job implements Comparable<Job> {
 
     private double tempoProcessamento;
 
-    private double job_size;
-
     public String name = UUID.randomUUID().toString().substring(0, 4);
 
     public Job() {
@@ -22,14 +20,6 @@ public class Job implements Comparable<Job> {
 
     public Job(double tempoProcessamento) {
         this.setTempoProcessamento(tempoProcessamento);
-    }
-
-    public double getJob_size() {
-        return job_size;
-    }
-
-    public void setJob_size(double job_size) {
-        this.job_size = job_size;
     }
 
     public double getTempoProcessamento() {
