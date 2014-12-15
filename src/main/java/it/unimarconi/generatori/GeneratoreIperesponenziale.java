@@ -12,12 +12,11 @@ public class GeneratoreIperesponenziale extends Generatore {
     }
 
     public Event getNextRoute() {
-        double ri = this.getNextRi();
-//        if (ri <= this.getP())
-//            return Event.IO;
-//        else
-//            return Event.OUT;
-        return ri <= this.getP() ? Event.IO : Event.OUT;
+        return this.getNextRi() <= this.getP() ? Event.IO : Event.OUT;
+    }
+
+    public Event getNextCPU() {
+        return this.getNextRi() <= this.getP() ? Event.CPU2 : Event.CPU1;
     }
 
     public double getP() {

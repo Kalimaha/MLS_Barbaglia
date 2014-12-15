@@ -4,7 +4,7 @@ public class Generatore {
 
     private final int a = 1220703125;
 
-    private final long m = 214748648;
+    private final long m = (long)Math.pow(2, 28);
 
     private long x0;
 
