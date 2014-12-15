@@ -4,10 +4,10 @@ public class MLS {
 
     public static void main(String[] args) {
 
-//        new RimozionePolarizzazioneIniziale().eseguiSimulazione();
+        new RimozionePolarizzazioneIniziale().eseguiSimulazione();
 //        new RunReplicati().eseguiSimulazione();
 
-        new RimozionePolarizzazioneIniziale().eseguiSimulazioneDoppiaCPU();
+//        new RimozionePolarizzazioneIniziale().eseguiSimulazioneDoppiaCPU();
 
     }
 

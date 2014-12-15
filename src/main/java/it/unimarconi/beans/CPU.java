@@ -13,7 +13,7 @@ public class CPU extends Unit {
         super();
         this.setFree(true);
         this.setQ(new TreeSet<Job>(new JobComparator()));
-        generatore = new Generatore3Erlang(x0_1, x0_2, x0_3, media);
+        this.setGeneratore(new Generatore3Erlang(x0_1, x0_2, x0_3, media));
     }
 
     @Override
@@ -29,6 +29,10 @@ public class CPU extends Unit {
 
     public Generatore3Erlang getGeneratore() {
         return generatore;
+    }
+
+    public void setGeneratore(Generatore3Erlang generatore) {
+        this.generatore = generatore;
     }
 
 }

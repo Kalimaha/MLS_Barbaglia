@@ -9,8 +9,8 @@ import java.util.ArrayList;
 public class RimozionePolarizzazioneIniziale {
 
     /* Variabili per la simulazione. */
-    private int run = 500;
-    private int jobTotali = 300;
+    private int run = 1;
+    private int jobTotali = 10;
     private int passo = 1;
 
     /* Vettori per le statistiche. */
@@ -23,14 +23,14 @@ public class RimozionePolarizzazioneIniziale {
     private long seed_routing_cpu = 135;
 
     /* Seed per la CPU. */
-    private long seed_cpu_1 = 227;
-    private long seed_cpu_2 = 233;
-    private long seed_cpu_3 = 135;
+    private long seed_cpu_1 = 233;
+    private long seed_cpu_2 = 135;
+    private long seed_cpu_3 = 179;
 
     /* Seed per la CPU 2. */
     private long seed_cpu_b_1 = 255;
-    private long seed_cpu_b_2 = 229;
-    private long seed_cpu_b_3 = 135;
+    private long seed_cpu_b_2 = 135;
+    private long seed_cpu_b_3 = 273;
 
     /* Seed per I/O. */
     private long seed_io_1 = 255;
