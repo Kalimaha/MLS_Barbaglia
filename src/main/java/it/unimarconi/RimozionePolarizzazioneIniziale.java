@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class RimozionePolarizzazioneIniziale {
 
     /* Variabili per la simulazione. */
-    private int run = 500;
+    private int run = 200;
     private int jobTotali = 1000;
     private int passo = 50;
 
