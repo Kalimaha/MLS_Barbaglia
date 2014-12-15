@@ -8,8 +8,8 @@ public class RimozionePolarizzazioneIniziale {
 
     /* Variabili per la simulazione. */
     private int run = 500;
-    private int jobTotali = 500;
-    private int passo = 10;
+    private int jobTotali = 1000;
+    private int passo = 50;
 
     /* Vettori per le statistiche. */
     private ArrayList<Double> avgs = new ArrayList<Double>();
@@ -36,6 +36,8 @@ public class RimozionePolarizzazioneIniziale {
 
         /* Cicla sui job. */
         for (int i = passo ; i <= jobTotali ; i += passo) {
+
+            System.out.println(i + " job totali...");
 
             /* Cicla sui run. */
             for (int j = 1 ; j <= run ; j++) {
@@ -76,13 +78,13 @@ public class RimozionePolarizzazioneIniziale {
             avgs.add(somma);
             sds.add(sd);
 
-            /* Stampa i vettori per i grafici. */
-            print(i);
-
             /* Reset del vettore. */
             tempiUscitaMedi = new ArrayList<Double>();
 
         }
+
+        /* Stampa i vettori per i grafici. */
+        print(jobTotali);
 
     }
 

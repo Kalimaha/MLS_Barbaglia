@@ -13,10 +13,11 @@ public class GeneratoreIperesponenziale extends Generatore {
 
     public Event getNextRoute() {
         double ri = this.getNextRi();
-        if (ri <= this.getP())
-            return Event.IO;
-        else
-            return Event.OUT;
+//        if (ri <= this.getP())
+//            return Event.IO;
+//        else
+//            return Event.OUT;
+        return ri <= this.getP() ? Event.IO : Event.OUT;
     }
 
     public double getP() {
