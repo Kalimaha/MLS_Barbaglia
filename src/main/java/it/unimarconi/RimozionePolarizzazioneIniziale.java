@@ -10,8 +10,8 @@ public class RimozionePolarizzazioneIniziale {
 
     /* Variabili per la simulazione. */
     private int run = 500;
-    private int jobTotali = 1000;
-    private int passo = 25;
+    private int jobTotali = 300;
+    private int passo = 1;
 
     /* Vettori per le statistiche. */
     private ArrayList<Double> avgs = new ArrayList<Double>();
