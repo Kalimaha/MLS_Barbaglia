@@ -15,9 +15,8 @@ public class Generatore {
     }
 
     public long getNext() {
-        long out = this.getX0();
         this.setX0((this.getA() * this.getX0()) % this.getM());
-        return out;
+        return this.getX0();
     }
 
     public double getNextRi() {

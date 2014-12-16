@@ -9,6 +9,10 @@ public class CPU extends Unit {
 
     private Generatore3Erlang generatore;
 
+    public CPU() {
+        super();
+    }
+
     public CPU(long x0_1, long x0_2, long x0_3, double media) {
         super();
         this.setFree(true);
@@ -19,6 +23,7 @@ public class CPU extends Unit {
     @Override
     public Job getJobFromQ() {
         Job j = this.getQ().iterator().next();
+//        System.out.println(j.getTempoProcessamento() + " queue");
         this.getQ().remove(j);
         return j;
     }

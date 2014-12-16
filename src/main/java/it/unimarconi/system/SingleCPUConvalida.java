@@ -1,32 +1,26 @@
 package it.unimarconi.system;
 
-import it.unimarconi.beans.CPU;
-import it.unimarconi.beans.IO;
-import it.unimarconi.beans.Job;
+import it.unimarconi.beans.*;
 import it.unimarconi.commons.Calendar;
 import it.unimarconi.commons.Event;
-import it.unimarconi.commons.Generatore;
-import it.unimarconi.generatori.Generatore3Erlang;
 import it.unimarconi.generatori.GeneratoreEsponenziale;
 import it.unimarconi.generatori.GeneratoreIperesponenziale;
-import it.unimarconi.utils.Stats;
+import it.unimarconi.generatori.GeneratorePoissoniano;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
 
 /** @author Guido Barbaglia */
-public class SingleCPU {
+public class SingleCPUConvalida {
 
-    private CPU cpu;
+    private CPUFIFO cpu;
 
-    private IO io;
+    private IOFIFO io;
 
     private Calendar calendar;
 
     private double clock;
 
-    private GeneratoreEsponenziale generatoreArrivi;
+    private GeneratorePoissoniano generatoreArrivi;
 
     private GeneratoreIperesponenziale generatoreRouting;
 
@@ -34,15 +28,15 @@ public class SingleCPU {
 
     private int jobTotali;
 
-    public SingleCPU(long x0_arrivi, long x0_cpu_1, long x0_cpu_2 ,long x0_cpu_3, long x0_io_1, long x0_io_2 ,long x0_io_3, long x0_routing, int jobTotali) {
+    public SingleCPUConvalida(long x0_arrivi, long x0_cpu, long x0_io, long x0_routing, int jobTotali) {
         this.setJobTotali(jobTotali);
-        this.setIo(new IO(x0_io_1, x0_io_2, x0_io_3, 2));
-        this.setCpu(new CPU(x0_cpu_1, x0_cpu_2, x0_cpu_3, 2));
+        this.setIo(new IOFIFO(x0_io, 2));
+        this.setCpu(new CPUFIFO(x0_cpu, 2));
         this.setClock(0);
-        this.setGeneratoreArrivi(new GeneratoreEsponenziale(x0_arrivi, 30));
+        this.setGeneratoreArrivi(new GeneratorePoissoniano(x0_arrivi, 30));
         this.setGeneratoreRouting(new GeneratoreIperesponenziale(x0_routing, 0.9));
         this.setCalendar(new Calendar());
-        this.getCalendar().setTempoArrivo(this.getClock() + this.getGeneratoreArrivi().getNextExp());
+        this.getCalendar().setTempoArrivo(this.getClock() + this.getGeneratoreArrivi().getNextPoisson());
         this.setTempiUscita(new ArrayList<Double>());
     }
 
@@ -52,7 +46,6 @@ public class SingleCPU {
         while (this.getTempiUscita().size() < this.getJobTotali()) {
             Event next = this.getCalendar().get_next();
             this.setClock(this.getCalendar().get_next_time(next));
-//            System.out.println(clock + " " + next);
             switch (next) {
                 case ARRIVAL: arrival(); break;
                 case CPU: cpu(); break;
@@ -66,9 +59,6 @@ public class SingleCPU {
             avg += d;
 
         /* Restituisci la media. */
-//        for (Double d : this.getTempiUscita())
-//            System.out.print(d + ", ");
-//        System.out.println("\n");
         return avg / this.getTempiUscita().size();
 
     }
@@ -94,12 +84,11 @@ public class SingleCPU {
     private void arrival() {
 
         /* Prevedi prossimo tempo di arrivo. */
-        this.getCalendar().setTempoArrivo(this.getClock() + this.getGeneratoreArrivi().getNextExp());
+        this.getCalendar().setTempoArrivo(this.getClock() + this.getGeneratoreArrivi().getNextPoisson());
 
         /* Crea nuovo job. */
         Job j = new Job();
-        j.setTempoProcessamento(this.getCpu().getGeneratore().getNext3Erlang());
-//        System.out.println(j.getTempoProcessamento() + " getTempoProcessamento CPU");
+        j.setTempoProcessamento(this.getCpu().getGeneratore().getNextExp());
         j.setTempoArrivo(this.getClock());
 
         /* Entra nella CPU se libera... */
@@ -111,7 +100,7 @@ public class SingleCPU {
 
         /* ...altrimenti in coda. */
         else {
-            this.getCpu().addJobToTheQueue(j);
+            this.getCpu().getCpuQ().add(j);
         }
 
     }
@@ -124,30 +113,25 @@ public class SingleCPU {
                     this.getIo().setJob(this.getCpu().getJob());
                     this.getCpu().setJob(null);
                     this.getCpu().setFree(true);
-                    this.getIo().getJob().setTempoProcessamento(this.getIo().getGeneratore().getNext3Erlang());
-//                    System.out.println(this.getIo().getJob().getTempoProcessamento() + " getTempoProcessamento IO");
+                    this.getIo().getJob().setTempoProcessamento(this.getIo().getGeneratore().getNextExp());
                     this.getCalendar().setTempoIO(this.getClock() + this.getIo().getJob().getTempoProcessamento());
                 } else {
-                    Job j = this.getCpu().getJob();
-                    j.setTempoProcessamento(this.getIo().getGeneratore().getNext3Erlang());
-                    this.getIo().getIoQ().add(j);
+                    this.getIo().getIoQ().add(this.getCpu().getJob());
                     this.getCpu().setJob(null);
                     this.getCpu().setFree(true);
                 }
                 break;
             case OUT:
                 this.getCpu().setFree(true);
-//                System.out.println(clock + " " + Event.OUT);
                 this.getCpu().getJob().setTempoUscita(this.getClock());
                 this.getTempiUscita().add(this.getCpu().getJob().getTempoJob());
                 this.getCpu().setJob(null);
                 break;
         }
-        if (this.getCpu().getQ().size() > 0) {
+        if (this.getCpu().getCpuQ().size() > 0) {
             this.getCpu().setJob(this.getCpu().getJobFromQ());
             this.getCpu().setFree(false);
-//            this.getCpu().getJob().setTempoProcessamento(this.getCpu().getGeneratore().getNext3Erlang());
-//            System.out.println("CPU " + this.getCpu().getJob().getTempoProcessamento());
+            this.getCpu().getJob().setTempoProcessamento(this.getCpu().getGeneratore().getNextExp());
             this.getCalendar().setTempoCPU(this.getClock() + this.getCpu().getJob().getTempoProcessamento());
         } else {
             this.getCalendar().setTempoCPU(Double.MAX_VALUE);
@@ -161,43 +145,23 @@ public class SingleCPU {
             this.getCpu().setFree(false);
             this.getCpu().setJob(this.getIo().getJob());
             this.getIo().setJob(null);
-            this.getCpu().getJob().setTempoProcessamento(this.getCpu().getGeneratore().getNext3Erlang());
-//            System.out.println(this.getCpu().getJob().getTempoProcessamento() + " getTempoProcessamento CPU");
+            this.getCpu().getJob().setTempoProcessamento(this.getCpu().getGeneratore().getNextExp());
             this.getCalendar().setTempoCPU(this.getClock() + this.getCpu().getJob().getTempoProcessamento());
         } else {
-            this.getIo().getJob().setTempoProcessamento(this.getCpu().getGeneratore().getNext3Erlang());
-            this.getCpu().addJobToTheQueue(this.getIo().getJob());
+            this.getCpu().getCpuQ().add(this.getIo().getJob());
             this.getIo().setJob(null);
             this.getIo().setFree(true);
         }
         if (this.getIo().getIoQ().size() > 0) {
             this.getIo().setJob(this.getIo().getJobFromQ());
             this.getIo().setFree(false);
-            this.getIo().getJob().setTempoProcessamento(this.getIo().getGeneratore().getNext3Erlang());
-//            this.getIo().getJob().setTempoProcessamento(this.getIo().getGeneratore().getNext3Erlang());
-//            System.out.println("IO " + this.getCpu().getJob().getTempoProcessamento());
+            this.getIo().getJob().setTempoProcessamento(this.getIo().getGeneratore().getNextExp());
             this.getCalendar().setTempoIO(this.getClock() + this.getIo().getJob().getTempoProcessamento());
         } else {
             this.getCalendar().setTempoIO(Double.MAX_VALUE);
             this.getIo().setFree(true);
             this.getIo().setJob(null);
         }
-    }
-
-    public CPU getCpu() {
-        return cpu;
-    }
-
-    public void setCpu(CPU cpu) {
-        this.cpu = cpu;
-    }
-
-    public IO getIo() {
-        return io;
-    }
-
-    public void setIo(IO io) {
-        this.io = io;
     }
 
     public Calendar getCalendar() {
@@ -224,11 +188,11 @@ public class SingleCPU {
         this.tempiUscita = tempiUscita;
     }
 
-    public GeneratoreEsponenziale getGeneratoreArrivi() {
+    public GeneratorePoissoniano getGeneratoreArrivi() {
         return generatoreArrivi;
     }
 
-    public void setGeneratoreArrivi(GeneratoreEsponenziale generatoreArrivi) {
+    public void setGeneratoreArrivi(GeneratorePoissoniano generatoreArrivi) {
         this.generatoreArrivi = generatoreArrivi;
     }
 
@@ -246,6 +210,22 @@ public class SingleCPU {
 
     public void setJobTotali(int jobTotali) {
         this.jobTotali = jobTotali;
+    }
+
+    public CPUFIFO getCpu() {
+        return cpu;
+    }
+
+    public void setCpu(CPUFIFO cpu) {
+        this.cpu = cpu;
+    }
+
+    public IOFIFO getIo() {
+        return io;
+    }
+
+    public void setIo(IOFIFO io) {
+        this.io = io;
     }
 
 }

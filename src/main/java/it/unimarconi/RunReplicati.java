@@ -2,6 +2,7 @@ package it.unimarconi;
 
 import it.unimarconi.generatori.GeneratoreIntervallo;
 import it.unimarconi.system.SingleCPU;
+import it.unimarconi.system.SingleCPUConvalida;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,11 +47,16 @@ public class RunReplicati {
 
         for (int i = 1 ; i <= run ; i++) {
             int jobsTotali = (int)g_intervallo.getNextRange();
-            SingleCPU singleCPU = new SingleCPU(seed_arrivi,
-                                                seed_cpu_1, seed_cpu_2, seed_cpu_3,
-                                                seed_io_1,  seed_io_2,  seed_io_3,
-                                                seed_routing,
-                                                jobsTotali);
+//            SingleCPU singleCPU = new SingleCPU(seed_arrivi,
+//                                                seed_cpu_1, seed_cpu_2, seed_cpu_3,
+//                                                seed_io_1,  seed_io_2,  seed_io_3,
+//                                                seed_routing,
+//                                                jobsTotali);
+            SingleCPUConvalida singleCPU = new SingleCPUConvalida(seed_arrivi,
+                    seed_cpu_1,
+                    seed_io_1,
+                    seed_routing,
+                    jobsTotali);
             ArrayList<Double> tmp = singleCPU.simulaPerRunReplicati();
             List<Double> l = tmp.subList(n0 - 1, tmp.size() - 1);
             System.out.println("original size: " + tmp.size() + "\t\t\tsize: " + l.size());
