@@ -33,7 +33,7 @@ public class SingleCPUConvalida {
         this.setIo(new IOFIFO(x0_io, 2));
         this.setCpu(new CPUFIFO(x0_cpu, 2));
         this.setClock(0);
-        this.setGeneratoreArrivi(new GeneratorePoissoniano(x0_arrivi, 30));
+        this.setGeneratoreArrivi(new GeneratorePoissoniano(x0_arrivi, 33));
         this.setGeneratoreRouting(new GeneratoreIperesponenziale(x0_routing, 0.9));
         this.setCalendar(new Calendar());
         this.getCalendar().setTempoArrivo(this.getClock() + this.getGeneratoreArrivi().getNextPoisson());

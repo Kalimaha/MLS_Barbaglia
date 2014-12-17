@@ -2,6 +2,7 @@ package it.unimarconi;
 
 import it.unimarconi.beans.Job;
 import it.unimarconi.generatori.Generatore3Erlang;
+import it.unimarconi.generatori.GeneratoreEsponenziale;
 import it.unimarconi.generatori.GeneratorePoissoniano;
 import it.unimarconi.utils.JobComparator;
 import it.unimarconi.utils.Stats;
@@ -51,12 +52,33 @@ public class QTest extends TestCase {
     }
 
     public void testPoisson() {
-        GeneratorePoissoniano g = new GeneratorePoissoniano(135, 30);
+        GeneratorePoissoniano g = new GeneratorePoissoniano(135, 4);
         ArrayList<Double> ns = new ArrayList<Double>();
-        for (int i = 0 ; i < 1000 ; i++) {
+        double[] classi = new double[100];
+        for (int i = 0 ; i < classi.length ; i++)
+            classi[i] = 0;
+        for (int i = 0 ; i < 5000 ; i++) {
             double d = g.getNextPoisson();
             ns.add(d);
-            System.out.print(d + ", ");
+            classi[(int)d] = 1 + classi[(int)d];
+        }
+        for (Double i : classi)
+            System.out.print((i / 5000) + ", ");
+    }
+
+    public void testExp() {
+        GeneratoreEsponenziale g = new GeneratoreEsponenziale(135, 30);
+        ArrayList<Double> ns = new ArrayList<Double>();
+        double[] classi = new double[1000];
+        for (int i = 0 ; i < classi.length ; i++)
+            classi[i] = 0;
+        for (int i = 0 ; i < 5000 ; i++) {
+            double d = g.getNextExp();
+            ns.add(d);
+            classi[(int) d] = 1 + classi[(int) d];
+        }
+        for (Double i : classi) {
+            System.out.print((i / 5000) + ", ");
         }
         System.out.println();
         System.out.println(Stats.media(ns));

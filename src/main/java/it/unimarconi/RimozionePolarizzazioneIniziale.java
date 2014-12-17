@@ -10,9 +10,9 @@ import java.util.ArrayList;
 public class RimozionePolarizzazioneIniziale {
 
     /* Variabili per la simulazione. */
-    private int run = 1;
-    private int jobTotali = 1;
-    private int passo = 1;
+    private int run = 500;
+    private int jobTotali = 1000;
+    private int passo = 50;
 
     /* Vettori per le statistiche. */
     private ArrayList<Double> avgs = new ArrayList<Double>();
@@ -40,16 +40,6 @@ public class RimozionePolarizzazioneIniziale {
 
         /* Cicla sui job. */
         for (int i = passo ; i <= jobTotali ; i += passo) {
-
-//            seed_arrivi = 229;
-//            seed_routing = 227;
-//            seed_routing_cpu = 135;
-//            seed_cpu_1 = 233;
-//            seed_cpu_2 = 135;
-//            seed_cpu_3 = 179;
-//            seed_io_1 = 255;
-//            seed_io_2 = 135;
-//            seed_io_3 = 273;
 
             /* Cicla sui run. */
             for (int j = 1 ; j <= run ; j++) {
@@ -107,8 +97,6 @@ public class RimozionePolarizzazioneIniziale {
 
         /* Cicla sui job. */
         for (int i = passo ; i <= jobTotali ; i += passo) {
-
-            System.out.println(i + " job totali...");
 
             /* Cicla sui run. */
             for (int j = 1 ; j <= run ; j++) {

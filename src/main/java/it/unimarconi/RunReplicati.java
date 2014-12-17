@@ -10,11 +10,11 @@ import java.util.List;
 public class RunReplicati {
 
     /* Variabili per la simulazione. */
-    private int run = 500;
+    private int run = 50;
 
     /* Numero di job da cui considero il sistema stabile. */
-    private int n0 = 500;
-    private int delta = 3000;
+    private int n0 = 1000;
+    private int delta = 1500;
 
     /* Vettori per le statistiche. */
     private ArrayList<Double> avgs = new ArrayList<Double>();
@@ -47,19 +47,19 @@ public class RunReplicati {
 
         for (int i = 1 ; i <= run ; i++) {
             int jobsTotali = (int)g_intervallo.getNextRange();
-//            SingleCPU singleCPU = new SingleCPU(seed_arrivi,
-//                                                seed_cpu_1, seed_cpu_2, seed_cpu_3,
-//                                                seed_io_1,  seed_io_2,  seed_io_3,
-//                                                seed_routing,
-//                                                jobsTotali);
-            SingleCPUConvalida singleCPU = new SingleCPUConvalida(seed_arrivi,
-                    seed_cpu_1,
-                    seed_io_1,
-                    seed_routing,
-                    jobsTotali);
+            SingleCPU singleCPU = new SingleCPU(seed_arrivi,
+                                                seed_cpu_1, seed_cpu_2, seed_cpu_3,
+                                                seed_io_1,  seed_io_2,  seed_io_3,
+                                                seed_routing,
+                                                jobsTotali);
+//            SingleCPUConvalida singleCPU = new SingleCPUConvalida(seed_arrivi,
+//                    seed_cpu_1,
+//                    seed_io_1,
+//                    seed_routing,
+//                    jobsTotali);
             ArrayList<Double> tmp = singleCPU.simulaPerRunReplicati();
             List<Double> l = tmp.subList(n0 - 1, tmp.size() - 1);
-            System.out.println("original size: " + tmp.size() + "\t\t\tsize: " + l.size());
+//            System.out.println("original size: " + tmp.size() + "\t\t\tsize: " + l.size());
             double sum = 0.0;
             double sumsq = 0.0;
             for (Double d : l) {
@@ -113,11 +113,19 @@ public class RunReplicati {
         double s2 = s211 - (2 * f * s212) + (f * f *s222);
         System.out.println("s2: " + s2);
 
-        double s = Math.sqrt(s2);
+//        double s = Math.sqrt(s2);
+        double s = s2;
         System.out.println("s: " + s);
         System.out.println();
 
         double d = s / (n_avg * Math.sqrt(nj.size()));
+
+        System.out.println(s);
+        System.out.println(n_avg);
+        System.out.println(Math.sqrt(nj.size()));
+        System.out.println(n_avg * Math.sqrt(nj.size()));
+        System.out.println();
+
         System.out.println("d: " + d);
         System.out.println();
 
