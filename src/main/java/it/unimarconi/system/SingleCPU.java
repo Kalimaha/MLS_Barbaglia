@@ -39,7 +39,7 @@ public class SingleCPU {
         this.setIo(new IO(x0_io_1, x0_io_2, x0_io_3, 2));
         this.setCpu(new CPU(x0_cpu_1, x0_cpu_2, x0_cpu_3, 2));
         this.setClock(0);
-        this.setGeneratoreArrivi(new GeneratoreEsponenziale(x0_arrivi, 30));
+        this.setGeneratoreArrivi(new GeneratoreEsponenziale(x0_arrivi, 29));
         this.setGeneratoreRouting(new GeneratoreIperesponenziale(x0_routing, 0.9));
         this.setCalendar(new Calendar());
         this.getCalendar().setTempoArrivo(this.getClock() + this.getGeneratoreArrivi().getNextExp());
