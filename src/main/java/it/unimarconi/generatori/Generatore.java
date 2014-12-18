@@ -2,7 +2,8 @@ package it.unimarconi.generatori;
 
 public class Generatore {
 
-    private final int a = 1220703125;
+//    private final int a = 1220703125;
+    private final int a = 3;
 
     private final long m = (long)Math.pow(2, 28);
 

@@ -11,7 +11,7 @@ public class RimozionePolarizzazioneIniziale {
 
     /* Variabili per la simulazione. */
     private int run = 500;
-    private int jobTotali = 1000;
+    private int jobTotali = 1500;
     private int passo = 50;
 
     /* Vettori per le statistiche. */

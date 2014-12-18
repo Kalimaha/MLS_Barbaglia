@@ -14,8 +14,8 @@ public class RunReplicati {
     private int run = 50;
 
     /* Numero di job da cui considero il sistema stabile. */
-    private int n0 = 150;
-    private int delta = 1500;
+    private int n0 = 400;
+    private int delta = 7000;
 
     /* Vettori per le statistiche. */
     private ArrayList<Double> avgs = new ArrayList<Double>();
@@ -40,7 +40,7 @@ public class RunReplicati {
 
     public void eseguiSimulazione() {
 
-        GeneratoreIntervallo g_intervallo = new GeneratoreIntervallo(seed_range, n0, n0 + delta);
+        GeneratoreIntervallo g_intervallo = new GeneratoreIntervallo(seed_range, 1 + n0, n0 + delta);
         ArrayList<Double> medie = new ArrayList<Double>();
 
         ArrayList<Double> yj = new ArrayList<Double>();
@@ -62,6 +62,10 @@ public class RunReplicati {
             ArrayList<Double> tmp = singleCPU.simulaPerRunReplicati();
             List<Double> l = tmp.subList(n0 - 1, tmp.size() - 1);
 //            System.out.println(Stats.media(new ArrayList<Double>(l)));
+//            System.out.println("run? " + i);
+//            System.out.println(l);
+//            System.out.println(Stats.media(new ArrayList<Double>(l)));
+//            System.out.println();
             medie.add(Stats.media(new ArrayList<Double>(l)));
 //            System.out.println("original size: " + tmp.size() + "\t\t\tsize: " + l.size());
             double sum = 0.0;
